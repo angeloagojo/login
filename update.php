@@ -6,11 +6,39 @@ $con = new database();
 $id = $_POST['id'];
 if(empty($id)){
     header('location:index.php');
-
 } else {
-    $row=$con->viewdata($id);
-    echo $row['first_name'];
+  $row=$con->viewdata($id);
 }
+
+if(isset($_POST['update'])){
+  $id = $_POST['id'];
+  $firstname= $_POST['first'];
+  $lastname = $_POST['last'];
+  $birthday = $_POST['birthday'];
+  $sex = $_POST['sex'];
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  $confirm = $_POST['c_pass'];
+
+  $street = $_POST['street'];
+  $barangay = $_POST['barangay'];
+  $city = $_POST['city'];
+  $province = $_POST['province'];
+
+  if($password==$confirm){
+    if($con->updateUser($id,$firstname, $lastname, $birthday, $sex, $username, $password)){
+      if($con->updateUserAddress($id,$street,$barangay,$city,$province)){
+        header('location:index.php');
+        exit();
+      } else {
+        $error = "Error while updating user address. Please try again.";
+      }
+    } else{
+      $error = "Error occured while updating user information. Please try again.";
+    }
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -46,11 +74,11 @@ if(empty($id)){
         <div class="form-row">
           <div class="form-group col-md-6 col-sm-12">
             <label for="firstName">First Name:</label>
-            <input type="text" class="form-control" name="first" value="<?php echo $row['first_name']; ?>" placeholder="Enter first name" required>
+            <input type="text" class="form-control" name="first" value="<?php echo ucwords($row['first_name']); ?>" placeholder="Enter first name" required>
           </div>
           <div class="form-group col-md-6 col-sm-12">
             <label for="lastName">Last Name:</label>
-            <input type="text" class="form-control" name="last" value="<?php echo $row['last_name']; ?>" placeholder="Enter last name" required>
+            <input type="text" class="form-control" name="last" value="<?php echo ucwords($row['last_name']); ?>" placeholder="Enter last name" required>
           </div>
         </div>
         <div class="form-row">
@@ -60,7 +88,7 @@ if(empty($id)){
           </div>
           <div class="form-group col-md-6">
             <label for="sex">Sex:</label>
-            <select class="form-control" value="<?php echo $row['sex']; ?>" name="sex" required>
+            <select class="form-control" value="<?php echo $row['sex']; ?>" name="sex" required>  
               <option selected>Select Sex</option>
               <option value="Male" <?php if($row['sex'] == 'Male') echo 'selected'?>>Male</option>
               <option value="Female" <?php if($row['sex'] == 'Female') echo 'selected'?>>Female</option>
@@ -68,16 +96,16 @@ if(empty($id)){
           </div>
         </div>
         <div class="form-group">
-          <label for="username">Username:</label>
-          <input type="text" class="form-control" name="username" value="<?php echo $row['user']; ?>" placeholder="Enter username" required>
+          <label for="username">Userna            </label>
+          <input type="text" class="fo            control" name="username" value="<?php echo $row['user']; ?>" placeholder="Enter username" required>
         </div>
         <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" class="form-control" name="password" value="<?php echo $row['pass']; ?>" placeholder="Enter password" required>
+          <label for="password">Passwo            </label>
+          <input type="password" class            orm-control" name="password" value="<?php echo $row['pass']; ?>" placeholder="Enter password" required>
         </div>
         <div class="form-group">
-          <label for="password">Confirm Password:</label>
-          <input type="password" class="form-control" name="c_pass" placeholder="Re-Enter password" required>
+          <label for="password">Confir            assword:</label>
+          <input type="password" class            orm-control" name="c_pass" placeholder="Re-Enter password" required>
         </div>
       </div>
     </div>
@@ -88,21 +116,21 @@ if(empty($id)){
       <div class="card-body">
         <div class="form-group">
           <label for="street">Street:</label>
-          <input type="text" class="form-control" name="street" value="<?php echo $row['user_street']; ?>" placeholder="Enter street" required>
+          <input type="text" class="form-control" name="street" value="<?php echo ucwords($row['user_street']); ?>" placeholder="Enter street" required>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="barangay">Barangay:</label>
-            <input type="text" class="form-control" name="barangay" value="<?php echo $row['user_barangay']; ?>" placeholder="Enter barangay" required>
+            <input type="text" class="form-control" name="barangay" value="<?php echo ucwords($row['user_barangay']); ?>" placeholder="Enter barangay" required>
           </div>
           <div class="form-group col-md-6">
             <label for="city">City:</label>
-            <input type="text" class="form-control" name="city" value="<?php echo $row['user_city']; ?>" placeholder="Enter city" required>
+            <input type="text" class="form-control" name="city" value="<?php echo ucwords($row['user_city']); ?>" placeholder="Enter city" required>
           </div>
         </div>
         <div class="form-group">
           <label for="province">Province:</label>
-          <input type="text" class="form-control" name="province" value="<?php echo $row['user_province']; ?>" placeholder="Enter province" required>
+          <input type="text" class="form-control" name="province" value="<?php echo ucwords($row['user_province']); ?>" placeholder="Enter province" required>
         </div>
       </div>
     </div>
@@ -118,10 +146,11 @@ if(empty($id)){
     <div class="container">
     <div class="row justify-content-center gx-0">
         <div class="col-lg-3 col-md-4"> 
-            <input type="submit" name="multisave" class="btn btn-outline-primary btn-block mt-4" value="Sign Up">
+        <input type="hidden" name="id" value="<?php echo $row['user_id']; ?>"> 
+            <input type="submit" name="update" class="btn btn-outline-primary btn-block mt-4" value="Update Profile">
         </div>
         <div class="col-lg-3 col-md-4"> 
-            <a class="btn btn-outline-danger btn-block mt-4" href="login.php">Go Back</a>
+            <a class="btn btn-outline-danger btn-block mt-4" href="index.php">Go Back</a>
         </div>
     </div>
 </div>
