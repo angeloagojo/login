@@ -96,16 +96,16 @@ if(isset($_POST['update'])){
           </div>
         </div>
         <div class="form-group">
-          <label for="username">Userna            </label>
-          <input type="text" class="fo            control" name="username" value="<?php echo $row['user']; ?>" placeholder="Enter username" required>
+          <label for="username">Username</label>
+          <input type="text" class="form-control" name="username" value="<?php echo $row['user']; ?>" placeholder="Enter username" required>
         </div>
         <div class="form-group">
-          <label for="password">Passwo            </label>
-          <input type="password" class            orm-control" name="password" value="<?php echo $row['pass']; ?>" placeholder="Enter password" required>
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" value="<?php echo $row['pass']; ?>" placeholder="Enter password" required>
         </div>
         <div class="form-group">
-          <label for="password">Confir            assword:</label>
-          <input type="password" class            orm-control" name="c_pass" placeholder="Re-Enter password" required>
+          <label for="password">Confirm Password:</label>
+          <input type="password" class="form-control" name="c_pass" placeholder="Re-Enter password" required>
         </div>
       </div>
     </div>
