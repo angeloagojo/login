@@ -2,6 +2,12 @@
 require_once('classes/database.php');
 $con = new database();
 
+session_start();
+
+if (empty($_SESSION['user'])) {
+  header('location:login.php');
+  }
+  
 
 $id = $_POST['id'];
 if(empty($id)){
@@ -64,8 +70,10 @@ if(isset($_POST['update'])){
 </head>
 <body>
 
+<?php include('includes/navbar.php');?>
+
 <div class="container custom-container rounded-3 shadow my-5 p-3 px-5">
-  <h3 class="text-center mt-4"> Registration Form</h3>
+  <h3 class="text-center mt-4"> User Profile</h3>
   <form method="post">
     <!-- Personal Information -->
     <div class="card mt-4">
@@ -96,11 +104,11 @@ if(isset($_POST['update'])){
           </div>
         </div>
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Username:</label>
           <input type="text" class="form-control" name="username" value="<?php echo $row['user']; ?>" placeholder="Enter username" required>
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Password:</label>
           <input type="password" class="form-control" name="password" value="<?php echo $row['pass']; ?>" placeholder="Enter password" required>
         </div>
         <div class="form-group">
